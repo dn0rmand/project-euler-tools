@@ -4,17 +4,16 @@ const assert = require('assert');
 
 class Tracer
 {
-    static create(speed, enabled, prefix)
+    static create(enabled, prefix)
     {
         if (enabled) {
-            return new Tracer(speed, enabled, prefix);
+            return new Tracer(enabled, prefix);
         }
     }
 
-    constructor(speed, enabled, prefix)
+    constructor(enabled, prefix)
     {
         this.enabled    = enabled;
-        this.speed      = speed;
         this.prefix     = prefix;
         this.lastLength = 0;
         this.lastString = '';

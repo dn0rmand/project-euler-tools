@@ -10,7 +10,7 @@ With [npm](https://www.npmjs.com/) do:
 # Examples
 
 ## BigMap / BigSet
-Same as javascripts Map but allows going over the limit of 2^24 entries
+Same as the javascript Map / Set but allows going over the limit of 2^24 entries
 
 ```javascript
 const { BigMap, BigSet } = require('@dn0rmand/project-euler-tools');
@@ -33,7 +33,7 @@ console.log(binomial(5n, 2n)); // calculate using BigInt
 ```
 
 ## BitArray
-Binary array to store only true(1) or false(0). It uses an `Uint8Array` array so it's max size is 8 times the max size of a `Unt8Array`
+Binary array to store only true(1) or false(0). It uses an `Uint8Array` array so its max size is 8 times the max size of a `Unt8Array`
 
 ```javascript
 const { BitArray } = require('@dn0rmand/project-euler-tools');
@@ -54,7 +54,7 @@ const b = digits(0x12345n, 16); // b = [1, 2, 3, 4, 5]
 ```
 
 ## isPrime
-Sames as [is-number-prime](https://www.npmjs.com/package/is-number-prime) but with a shortcut for number lower than 20
+Same as [is-number-prime](https://www.npmjs.com/package/is-number-prime) but with a shortcut for numbers lower than 20
 
 ## DistinctCollection
 Collection of distincts numbers
@@ -102,7 +102,7 @@ console.log(divisorsCount(10));
 ```
 
 ## fibonacci
-Calculate the fibonacci value of a number with modulo, using matrix.
+Calculates the fibonacci value of a number with modulo, using matrix.
 
 ```javascript
 const { fibonacci } = require('@dn0rmand/project-euler-tools');
@@ -111,10 +111,13 @@ console.log(fibonacci(20000, 1E8));
 ```
 
 ## linearRecurrence
+Tries to find a linearRecurrence for a given array of values
 
 ## polynomial
+Tries to find a polynomial for a given set of values
 
 ## primeHelper
+Lots of helpers related to prime numbers including mobius and PHI functions.
 
 ## primes
 Prime generator function. 
@@ -136,7 +139,55 @@ Allows to calculate how long a process took
 const { TimeLogger } = require('@dn0rmand/project-euler-tools');
 
 const result = TimeLogger.wrap('processing', _ => doStuff()); 
-// result will be the value returned by doStuff and the elapsed time will be output to the console
 ```
+result value will be the value returned by doStuff and the elapsed time will be output to the console
 
 ## Tracer
+Helper to trace progress while running long calculations. The trace will be output only if a second elapsed since the previous call to `print`
+```javascript
+const { Tracer } = require('@dn0rmand/project-euler-tools');
+
+const tracer = new Tracer(true);
+for (let k = 1; k <= MAX; k++) {
+  tracer.print(_ => MAX - k);
+  doStuffWithK(k);
+}
+tracer.clear();
+```
+
+## src/numberHelper and src/bigintHelper
+
+Those are automatically included by `require('@dn0rmand/project-euler-tools');`  
+They add the following prototypes to Number and BigInt
+- `gcd(b)`  
+calculates the greatest common divisor of the value and b
+
+- `lcm(b)`  
+calculates the least common multiple of the value and b
+
+- `isCoPrime(b)`  
+Checks if the value is coprime with b
+
+- `modMul(product, modulo)`  
+calculates `(value*product) % modulo`
+
+- `modPow(power, modulo)`  
+calculates `(value ** power) % modulo`
+
+- `modInv(modulo)`  
+calculates the modulo inverse
+
+- `modDiv(divisor, modulo)`  
+calculates `(value * product.modInv(modulo)) % modulo`
+
+The following prototypes are also added to BigInt
+- `toExponential(maxDigits)`  
+Returns the number converted to a string in the exponential format.
+For example the following code with output `1.23457e11`
+```javascript
+const v = 123456781234n;
+console.log(v.toExponential(5));
+```  
+
+- `divise(divisor, precision)`  
+Divides the `BigInt` value by the divisor (a `BigInt` too) with the required precision and returns the result as a `Number`

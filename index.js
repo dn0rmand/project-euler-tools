@@ -39,3 +39,6 @@ const tools = {
 };
 
 module.exports = tools;
+
+const v = 123456781234n;
+console.log(v.toExponential(5));
