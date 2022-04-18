@@ -18,13 +18,13 @@ const awaitable = (worker, progressCallback) => new Promise((resolve, reject) =>
 
 let workers = [];
 let progress = [];
-let tracer = new Tracer(1, true);
+let tracer = new Tracer(true);
 
 function reset()
 {
     workers = [];
     progress= [];
-    tracer = new Tracer(1, true);
+    tracer = new Tracer(true);
 }
 
 function postProgress(value)

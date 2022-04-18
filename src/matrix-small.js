@@ -93,7 +93,7 @@ class Matrix
             fixSum = a => a;
         }
 
-        const tracer = new Tracer(100, trace);
+        const tracer = new Tracer(trace);
 
         for (let i = 0; i < this.rows; i++) 
         {
@@ -128,7 +128,7 @@ class Matrix
         let m  = this;
         let mm = undefined;
 
-        const tracer = new Tracer(1, trace);
+        const tracer = new Tracer(trace);
 
         while (pow > 1n)
         {

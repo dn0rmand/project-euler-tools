@@ -15,7 +15,7 @@ function rank(values, MODULO, trace)
 
     let rank = 0n;
 
-    const tracer = new Tracer(500000, trace);
+    const tracer = new Tracer(trace);
     for(let i = 0; i < n; i++)
     {
         tracer.print(_ => n-i);

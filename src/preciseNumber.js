@@ -185,6 +185,9 @@ class PreciseNumber
     }
 
     toString() {
+        if (this.divisor === 1n) {
+            return `${this.numerator}`;
+        }
         return `${this.numerator}/${this.divisor}`;
     }
 

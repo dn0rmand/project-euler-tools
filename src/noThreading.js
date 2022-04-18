@@ -1,14 +1,14 @@
 const Tracer = require('./tracer');
 
 let workers = [];
-let tracer = new Tracer(1, true);
+let tracer = new Tracer(true);
 let postMessage = () => {}
 
 function reset()
 {
     workers = [];
     progress= [];
-    tracer = new Tracer(1, true);
+    tracer = new Tracer(true);
     postMessage = () => {};
 }
 

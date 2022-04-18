@@ -45,7 +45,7 @@ class StateMachine
     {
         this.states     = new Map();
         this.newStates  = new Map();
-        this.Tracer     = new Tracer(1, trace);
+        this.Tracer     = new Tracer(trace);
     }
 
     trace() 

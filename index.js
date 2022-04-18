@@ -16,6 +16,8 @@ const tools = {
     fractions: require("./src/fractions"),
     isPrime: require("./src/isPrime"),
     linearRecurrence: require('./src/linearRecurrence'),
+    matrixSmall: require('./src/matrix-small'),
+    matrix: require('./src/matrix'), 
     millerRabin: require('./src/millerRabin'),
     noThreading: require('./src/noThreading'),
     permutationRanking: require('./src/permutationRanking'),
@@ -39,6 +41,3 @@ const tools = {
 };
 
 module.exports = tools;
-
-const v = 123456781234n;
-console.log(v.toExponential(5));

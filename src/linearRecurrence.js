@@ -229,7 +229,7 @@ module.exports = function(data, minSize, trace, modulo)
 
     function findRecurrence(data, minSize, trace)
     {
-        const tracer = new Tracer(1, trace);
+        const tracer = new Tracer(trace);
         if (minSize === true) {
             try {
                 minSize = findSize(data);

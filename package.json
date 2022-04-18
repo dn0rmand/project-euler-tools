@@ -1,11 +1,14 @@
 {
   "name": "@dn0rmand/project-euler-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Set of tools for Project Euler",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/dn0rmand/project-euler-tools.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
