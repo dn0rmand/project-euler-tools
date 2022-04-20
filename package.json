@@ -1,6 +1,6 @@
 {
   "name": "@dn0rmand/project-euler-tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Set of tools for Project Euler",
   "main": "index.js",
   "repository": {
