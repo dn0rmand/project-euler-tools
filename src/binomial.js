@@ -1,45 +1,79 @@
 const $C = [];
 
-function binomial(n, p) {
-    const bigint = typeof (n) === 'bigint';
+function modBinomial(n, p, modulo) {
+  if (p === 0n) {
+    return 1;
+  } else if (p === 1n) {
+    return Number(n % modulo);
+  }
 
-    const ZERO = bigint ? 0n : 0;
-    const ONE = bigint ? 1n : 1;
-    const TWO = bigint ? 2n : 2;
-
-    if (n < p) {
-        return ZERO;
+  if (n < modulo && p < modulo) {
+    let top = 1n;
+    let bottom = 1n;
+    for (let i = 2n; i <= n; i++) {
+      top = (top * i) % modulo;
     }
-
-    if (p === ZERO || p === n) {
-        return ONE;
+    for (let i = 2n; i <= p; i++) {
+      bottom = (bottom * i) % modulo;
     }
-    if (p === ONE || p === n) {
-        return n;
+    for (let i = 2n; i <= n - p; i++) {
+      bottom = (bottom * i) % modulo;
     }
+    return Number(top.modDiv(bottom, modulo));
+  } else {
+    const n2 = n / modulo;
+    const p2 = p / modulo;
 
-    if (p > n / TWO) {
-        p = n - p;
-    }
+    return modBinomial(n2, p2, modulo).modMul(
+      modBinomial(n % modulo, p % modulo, modulo),
+      Number(modulo)
+    );
+  }
+}
 
-    if ($C[n] && $C[n][p]) {
-        return $C[n][p];
-    }
+function binomial(n, p, modulo) {
+  if (modulo !== undefined) {
+    return C(BigInt(n), BigInt(p), BigInt(modulo));
+  }
+  const bigint = typeof n === "bigint";
 
-    let result = n;
+  const ZERO = bigint ? 0n : 0;
+  const ONE = bigint ? 1n : 1;
+  const TWO = bigint ? 2n : 2;
 
-    for (let p2 = ONE; p2 < p; p2++) {
-        result *= n - p2;
-        result /= p2 + ONE;
-    }
+  if (n < p) {
+    return ZERO;
+  }
 
-    if (!$C[n]) {
-        $C[n] = [];
-    }
+  if (p === ZERO || p === n) {
+    return ONE;
+  }
+  if (p === ONE || p === n) {
+    return n;
+  }
 
-    $C[n][p] = result;
+  if (p > n / TWO) {
+    p = n - p;
+  }
 
-    return result;
+  if ($C[n] && $C[n][p]) {
+    return $C[n][p];
+  }
+
+  let result = n;
+
+  for (let p2 = ONE; p2 < p; p2++) {
+    result *= n - p2;
+    result /= p2 + ONE;
+  }
+
+  if (!$C[n]) {
+    $C[n] = [];
+  }
+
+  $C[n][p] = result;
+
+  return result;
 }
 
 module.exports = binomial;
