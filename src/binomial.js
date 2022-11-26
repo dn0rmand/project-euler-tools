@@ -33,7 +33,7 @@ function modBinomial(n, p, modulo) {
 
 function binomial(n, p, modulo) {
   if (modulo !== undefined) {
-    return C(BigInt(n), BigInt(p), BigInt(modulo));
+    return modBinomial(BigInt(n), BigInt(p), BigInt(modulo));
   }
   const bigint = typeof n === "bigint";
 
