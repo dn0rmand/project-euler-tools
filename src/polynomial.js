@@ -25,7 +25,7 @@ function factorial(value) {
 function differences(values) {
   const result = [];
   for (let i = 1; i < values.length; i++) {
-    let v = values[i] - values[i - 1];
+    const v = values[i] - values[i - 1];
     result.push(v);
   }
   return result;
@@ -61,11 +61,11 @@ function* solve(values, divisor) {
     divisor = 1n;
   }
 
-  let { power, constant } = reduce(values);
+  const { power, constant } = reduce(values);
 
   let n = constant;
   let d = factorial(power);
-  let i = gcd(n, d);
+  const i = gcd(n, d);
   n /= i;
   d /= i;
 
@@ -75,20 +75,16 @@ function* solve(values, divisor) {
     }
 
     let dd = d * divisor;
-    let g = gcd(n, dd);
+    const g = gcd(n, dd);
     n /= g;
     dd /= g;
     yield { power, n, d: dd };
     return;
   }
 
-  for (let x = 1n; x < values.length; x++) {
-    let v = x ** power;
-    let N = n * v;
-    if (N === 0n) {
-      continue;
-    }
-
+  for (let x = 0n; x < values.length; x++) {
+    const v = x ** power;
+    const N = n * v;
     values[x] = values[x] * d - N;
   }
 
@@ -117,7 +113,7 @@ function calculate(x, coefficients, modulo) {
     } else {
       v = x ** c.power * divisor * c.n;
 
-      let g = gcd(v, d);
+      const g = gcd(v, d);
       v /= g;
       d /= g;
 
@@ -130,7 +126,7 @@ function calculate(x, coefficients, modulo) {
   if (modulo) {
     value = value.modDiv(divisor, modulo);
   } else {
-    let d = gcd(value, divisor);
+    const d = gcd(value, divisor);
     value /= d;
     divisor /= d;
     assert.equal(divisor, 1n);
@@ -143,18 +139,18 @@ const polynomial = {
 
   findPower: function (values) {
     values = values.map((v) => BigInt(v));
-    let { power } = reduce(values, this.thresold);
+    const { power } = reduce(values, this.thresold);
     return power;
   },
 
   findPolynomial: function (start, step, fx, max) {
     max = max || 1000;
-    let values = [];
+    const values = [];
     let x = start;
 
     while (x <= max) {
       try {
-        let power = this.findPower(values);
+        const power = this.findPower(values);
         if (power) {
           try {
             return this.solve(values);
@@ -175,7 +171,7 @@ const polynomial = {
   solve: function (values) {
     values = values.map((v) => BigInt(v));
 
-    let coefficients = [...solve(values)];
+    const coefficients = [...solve(values)];
 
     return {
       coefficients,
