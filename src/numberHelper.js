@@ -48,10 +48,12 @@ const numberHelper = function () {
 
   Number.prototype.gcd = function (b) {
     let a = this.valueOf();
-    if (a < b) [a, b] = [b, a];
+    if (a < b) {
+      [a, b] = [b, a];
+    }
 
     while (b !== 0) {
-      let c = a % b;
+      const c = a % b;
       a = b;
       b = c;
     }
@@ -79,11 +81,11 @@ const numberHelper = function () {
 
   Number.prototype.lcm = function (b) {
     let a = this;
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
+    a = a < 0 ? -a : a;
+    b = b < 0 ? -b : b;
 
-    let g = a.gcd(b);
-    let l = (a / g) * b;
+    const g = a.gcd(b);
+    const l = (a / g) * b;
 
     return l;
   };
@@ -97,21 +99,27 @@ const numberHelper = function () {
         console.log(error);
       }
       r = Number(r);
-    } else {
-      if (r <= -modulo || r >= modulo) r %= modulo;
+    } else if (r <= -modulo || r >= modulo) {
+      r %= modulo;
     }
     return r;
   };
 
   Number.prototype.modPow = function (exp, modulo) {
-    if (modulo == 0) throw new Error("Cannot take modPow with modulus 0");
+    if (modulo == 0) {
+      throw new Error("Cannot take modPow with modulus 0");
+    }
 
     let value = this;
     let r = 1;
     let base = value;
-    if (base >= modulo || base <= -modulo) base %= modulo;
+    if (base >= modulo || base <= -modulo) {
+      base %= modulo;
+    }
 
-    if (base == 0) return 0;
+    if (base == 0) {
+      return 0;
+    }
 
     while (exp > 0) {
       if ((exp & 1) == 1) {
@@ -134,7 +142,9 @@ const numberHelper = function () {
     let newR = this;
     let q, lastT, lastR;
 
-    if (newR < 0) newR = -newR;
+    if (newR < 0) {
+      newR = -newR;
+    }
 
     while (newR != 0) {
       q = Math.floor(r / newR);
@@ -145,23 +155,28 @@ const numberHelper = function () {
       newT = lastT - q * newT;
       newR = lastR - q * newR;
     }
-    if (r != 1)
+    if (r != 1) {
       throw new Error(
         this.toString() + " and " + modulo.toString() + " are not co-prime"
       );
+    }
+    if (t < 0) {
+      t += modulo;
+    }
 
-    if (t < 0) t += modulo;
-
-    if (modulo < 0) return -t;
-    return t;
+    return modulo < 0 ? -t : t;
   };
 
   Number.prototype.modDiv = function (divisor, modulo) {
-    if (divisor == 0) throw "Cannot divide by zero";
-    if (modulo == 0) throw "Cannot take modDiv with modulus zero";
+    if (divisor == 0) {
+      throw "Cannot divide by zero";
+    }
+    if (modulo == 0) {
+      throw "Cannot take modDiv with modulus zero";
+    }
 
     divisor = divisor.modInv(modulo);
-    let result = this.modMul(divisor, modulo);
+    const result = this.modMul(divisor, modulo);
     return result;
   };
 

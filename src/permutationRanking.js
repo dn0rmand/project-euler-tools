@@ -1,13 +1,15 @@
 const Tracer = require("./tracer");
 
-`https://bonetblai.github.io/reports/AAAI08-ws10-ranking.pdf `;
+//`https://bonetblai.github.io/reports/AAAI08-ws10-ranking.pdf `;
 
 function rank(values, MODULO, trace) {
   const n = values.length;
   const k = Math.ceil(Math.log2(n));
   const T = new Uint32Array(2 ** (k + 1));
 
-  if (MODULO) MODULO = BigInt(MODULO);
+  if (MODULO) {
+    MODULO = BigInt(MODULO);
+  }
 
   const k2 = 2 ** k;
 
@@ -20,7 +22,9 @@ function rank(values, MODULO, trace) {
     let digit = values[i] - 1;
     let node = k2 + digit;
     for (let j = 1; j <= k; j++) {
-      if (node & 1) digit -= T[node - 1];
+      if (node & 1) {
+        digit -= T[node - 1];
+      }
 
       T[node]++;
       node >>= 1;
@@ -29,7 +33,9 @@ function rank(values, MODULO, trace) {
     T[node]++;
 
     rank = rank * BigInt(n - i) + BigInt(digit);
-    if (MODULO) rank %= MODULO;
+    if (MODULO) {
+      rank %= MODULO;
+    }
   }
   tracer.clear();
   return rank;
@@ -56,7 +62,9 @@ function unrank(rankValue, n) {
   for (let i = 0; i <= k; i++) {
     const v = 2 ** (k - i);
     const i2 = 2 ** i;
-    for (let j = 1; j <= i2; j++) T[i2 + j - 1] = v;
+    for (let j = 1; j <= i2; j++) {
+      T[i2 + j - 1] = v;
+    }
   }
 
   // do the work

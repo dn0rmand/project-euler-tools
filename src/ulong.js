@@ -13,7 +13,9 @@ class ULong {
   //#region Static methods
 
   static fromNumber(number) {
-    if (typeof number !== "number") throw "ERROR. Invalid input";
+    if (typeof number !== "number") {
+      throw "ERROR. Invalid input";
+    }
 
     const lo = number & ULong.MASK;
     const hi = ((number - lo) / ULong.MODULO) & ULong.MASK;
@@ -21,7 +23,9 @@ class ULong {
   }
 
   static fromBigInt(number) {
-    if (typeof number !== "bigint") throw "ERROR. Invalid input";
+    if (typeof number !== "bigint") {
+      throw "ERROR. Invalid input";
+    }
 
     const lo = number & ULong.MASK_N;
     const hi = ((number - lo) / ULong.MODULO_N) & ULong.MASK_N;
@@ -29,7 +33,9 @@ class ULong {
   }
 
   static fromString(value) {
-    if (typeof number !== "string") throw "ERROR. Invalid input";
+    if (typeof number !== "string") {
+      throw "ERROR. Invalid input";
+    }
 
     return ULong.fromBigInt(BigInt(value));
   }
@@ -55,21 +61,25 @@ class ULong {
   //#endregion
 
   add(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
     let lo = this.lo + value.lo;
     let hi = this.hi + value.hi;
 
-    if (lo > ULong.MASK) hi += (lo - (lo & ULong.MASK)) / ULong.MODULO;
+    if (lo > ULong.MASK) {
+      hi += (lo - (lo & ULong.MASK)) / ULong.MODULO;
+    }
     lo &= ULong.MASK;
 
     return new ULong(lo, hi);
   }
 
   sub(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
     let hi = ~value.hi;
     let lo = ~value.lo;
@@ -85,8 +95,9 @@ class ULong {
   }
 
   and(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
     const lo = this.lo & value.lo;
     const hi = this.hi & value.hi;
@@ -95,12 +106,15 @@ class ULong {
   }
 
   mul(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
     console.warn("THIS WASN'T TESTED YET");
 
-    if (value.eq(ULong.ZERO)) return ULong.ZERO;
+    if (value.eq(ULong.ZERO)) {
+      return ULong.ZERO;
+    }
 
     let result = this;
     let previous = ULong.ZERO;
@@ -120,18 +134,26 @@ class ULong {
   }
 
   shl(value) {
-    if (typeof value !== "number") throw "ERROR. Invalid input";
-    if (value < 0) throw "Invalid value";
+    if (typeof value !== "number") {
+      throw "ERROR. Invalid input";
+    }
+    if (value < 0) {
+      throw "Invalid value";
+    }
 
     let result = this;
 
     if (value >= ULong.BITS) {
       result = new ULong(0, this.lo);
       value -= ULong.BITS;
-      if (value >= ULong.BITS) return ULong.ZERO;
+      if (value >= ULong.BITS) {
+        return ULong.ZERO;
+      }
     }
 
-    if (!value) return result;
+    if (!value) {
+      return result;
+    }
 
     let offset = result.lo >>> (ULong.BITS - value);
     let lo = (result.lo << value) & ULong.MASK;
@@ -141,8 +163,12 @@ class ULong {
   }
 
   shr(value) {
-    if (typeof value !== "number") throw "ERROR. Invalid input";
-    if (value < 0) throw "Invalid value";
+    if (typeof value !== "number") {
+      throw "ERROR. Invalid input";
+    }
+    if (value < 0) {
+      throw "Invalid value";
+    }
 
     console.warn("THIS WASN'T TESTED YET");
 
@@ -151,10 +177,14 @@ class ULong {
     if (value >= ULong.BITS) {
       result = new ULong(this.hi, 0);
       value -= ULong.BITS;
-      if (value >= ULong.BITS) return ULong.ZERO;
+      if (value >= ULong.BITS) {
+        return ULong.ZERO;
+      }
     }
 
-    if (!value) return this;
+    if (!value) {
+      return this;
+    }
 
     let offset = (((1 << value) - 1) & result.hi) << (ULong.BITS - value);
     let hi = (this.hi >>> value) & ULong.MASK;
@@ -164,45 +194,64 @@ class ULong {
   }
 
   eq(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
     return value.lo == this.lo && value.hi == this.hi;
   }
 
   gt(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
-
-    if (this.hi > value.hi) return true;
-    if (this.hi < value.hi) return false;
+    }
+    if (this.hi > value.hi) {
+      return true;
+    }
+    if (this.hi < value.hi) {
+      return false;
+    }
     return this.lo > value.lo;
   }
 
   gte(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
-
-    if (this.hi > value.hi) return true;
-    if (this.hi < value.hi) return false;
+    }
+    if (this.hi > value.hi) {
+      return true;
+    }
+    if (this.hi < value.hi) {
+      return false;
+    }
     return this.lo >= value.lo;
   }
 
   lt(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
-    if (this.hi < value.hi) return true;
-    if (this.hi > value.hi) return false;
+    if (this.hi < value.hi) {
+      return true;
+    }
+    if (this.hi > value.hi) {
+      return false;
+    }
     return this.lo < value.lo;
   }
 
   lte(value) {
-    if (value.lo === undefined || value.hi === undefined)
+    if (value.lo === undefined || value.hi === undefined) {
       throw "ERROR. Invalid input";
+    }
 
-    if (this.hi < value.hi) return true;
-    if (this.hi > value.hi) return false;
+    if (this.hi < value.hi) {
+      return true;
+    }
+    if (this.hi > value.hi) {
+      return false;
+    }
     return this.lo <= value.lo;
   }
 }

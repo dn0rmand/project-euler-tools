@@ -14,11 +14,15 @@ class TimeLogger {
   logEnd() {
     let msg = this.message ? ".. " : "";
     TimeLogger.log(`${msg}Executed in ${prettyHrtime(Number(this.time), 2)}`);
-    if (!debugging) process.stdout.write("\r\n");
+    if (!debugging) {
+      process.stdout.write("\r\n");
+    }
   }
 
   logStart() {
-    if (!this.message) return;
+    if (!this.message) {
+      return;
+    }
 
     if (debugging) {
       console.log(this.message);
@@ -42,15 +46,20 @@ class TimeLogger {
   }
 
   pause() {
-    if (this.timer === undefined) return; // Wasn't started!!!
+    if (this.timer === undefined) {
+      return; // Wasn't started!!!
+    }
     this.time += process.hrtime.bigint() - this.timer;
     this.timer = undefined;
     this.paused = true;
   }
 
   resume() {
-    if (!this.paused) this.start();
-    else this.timer = process.hrtime.bigint();
+    if (!this.paused) {
+      this.start();
+    } else {
+      this.timer = process.hrtime.bigint();
+    }
   }
 
   static log(message) {

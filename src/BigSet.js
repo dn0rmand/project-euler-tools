@@ -22,10 +22,14 @@ class BigSet {
   }
 
   has(key) {
-    if (this.map.has(key)) return true;
+    if (this.map.has(key)) {
+      return true;
+    }
 
-    for (let m of this.maps) {
-      if (m.has(key)) return true;
+    for (const m of this.maps) {
+      if (m.has(key)) {
+        return true;
+      }
     }
 
     return false;
@@ -35,7 +39,7 @@ class BigSet {
     let removed = false;
 
     removed |= this.map.delete(key);
-    for (let m of this.maps) {
+    for (const m of this.maps) {
       removed |= m.delete(key);
     }
 
@@ -43,18 +47,24 @@ class BigSet {
   }
 
   add(key) {
-    if (this.has(key)) return;
+    if (this.has(key)) {
+      return;
+    }
 
     this.map.add(key);
     if (this.map.size >= BigSet.maxSize) {
       // console.log(`... extending map for ${this.name}`);
-      if (!this.nogrow) this.maps.push(this.map);
+      if (!this.nogrow) {
+        this.maps.push(this.map);
+      }
       this.map = new Set();
     }
   }
 
   clear() {
-    for (let m of this.maps) m.clear();
+    for (const m of this.maps) {
+      m.clear();
+    }
 
     this.maps = [];
     this.map.clear();
@@ -65,20 +75,28 @@ class BigSet {
   }
 
   *values(autoClear) {
-    for (let m of this.maps) {
+    for (const m of this.maps) {
       yield* m.values();
-      if (autoClear) m.clear();
+      if (autoClear) {
+        m.clear();
+      }
     }
 
-    if (autoClear && this.maps.length > 0) this.maps = [];
+    if (autoClear && this.maps.length > 0) {
+      this.maps = [];
+    }
 
     yield* this.map.values();
 
-    if (autoClear) this.map.clear();
+    if (autoClear) {
+      this.map.clear();
+    }
   }
 
   forEach(callback) {
-    for (let m of this.maps) m.forEach(callback);
+    for (const m of this.maps) {
+      m.forEach(callback);
+    }
 
     this.map.forEach(callback);
   }

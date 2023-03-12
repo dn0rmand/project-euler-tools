@@ -39,7 +39,9 @@ class Tracer {
     if (this.enabled) {
       let length = this.lastLength;
 
-      if (!excludePrefix && this.prefix) length += this.prefix.length + 2;
+      if (!excludePrefix && this.prefix) {
+        length += this.prefix.length + 2;
+      }
 
       if (length) {
         process.stdout.write(back(length));

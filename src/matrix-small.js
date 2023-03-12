@@ -20,7 +20,9 @@ class Matrix {
 
     matrix.array[0] = [...factors].reverse().map((a) => Number(a));
 
-    for (let i = 1; i < factors.length; i++) matrix.set(i, i - 1, 1);
+    for (let i = 1; i < factors.length; i++) {
+      matrix.set(i, i - 1, 1);
+    }
 
     return matrix;
   }
@@ -44,15 +46,17 @@ class Matrix {
   }
 
   get(row, column) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns)
+    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
       throw "Argument out of range";
+    }
 
     return this.array[row][column];
   }
 
   set(row, column, value) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns)
+    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
       throw "Argument out of range";
+    }
 
     this.array[row][column] = Number(value);
   }
@@ -65,15 +69,19 @@ class Matrix {
       const modulo_n = BigInt(modulo);
 
       modMul = (a, b) => {
-        let v = a * b;
-        if (v > Number.MAX_SAFE_INTEGER)
+        const v = a * b;
+        if (v > Number.MAX_SAFE_INTEGER) {
           return Number((BigInt(a) * BigInt(b)) % modulo_n);
-        else return v % modulo;
+        } else {
+          return v % modulo;
+        }
       };
 
       modSum = (a, b) => (a + b) % modulo;
       fixSum = (a) => {
-        while (a < 0) a += modulo;
+        while (a < 0) {
+          a += modulo;
+        }
         return a;
       };
     } else {
@@ -107,7 +115,9 @@ class Matrix {
 
   pow(pow, modulo, trace) {
     pow = BigInt(pow);
-    if (pow === 1n) return this;
+    if (pow === 1n) {
+      return this;
+    }
 
     let m = this;
     let mm = undefined;
@@ -118,9 +128,7 @@ class Matrix {
       tracer.print((_) => pow);
 
       if ((pow & 1n) !== 0n) {
-        if (mm === undefined) mm = m;
-        else mm = mm.multiply(m, modulo, trace);
-
+        mm = mm === undefined ? m : mm.multiply(m, modulo, trace);
         pow--;
       }
 
@@ -130,10 +138,7 @@ class Matrix {
       }
     }
 
-    if (mm !== undefined) {
-      m = m.multiply(mm, modulo, trace);
-    }
-
+    m = mm === undefined ? m : m.multiply(mm, modulo, trace);
     tracer.clear();
     return m;
   }

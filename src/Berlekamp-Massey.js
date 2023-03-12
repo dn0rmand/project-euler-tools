@@ -1,7 +1,7 @@
 require("./numberHelper");
 
 function pow_mod(a, k, modulo) {
-  return a.modPow(k.modulo);
+  return a.modPow(k, modulo);
 }
 
 function modMul(a, b, m) {

@@ -5,7 +5,9 @@ module.exports = function (S) {
     let N = Math.sqrt(S);
     let A = Math.floor(N);
 
-    if (A === N) return;
+    if (A === N) {
+      return;
+    }
 
     let m0 = 0;
     let d0 = 1;

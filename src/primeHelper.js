@@ -7,7 +7,9 @@ let $db = undefined;
 let $dbCache = {};
 
 function openDB() {
-  if ($db) return $db;
+  if ($db) {
+    return $db;
+  }
 
   const dbFileName = `${__dirname}/primeCounts.sqlite`;
   const dbZipName = dbFileName + ".zip";
@@ -50,12 +52,16 @@ function getPrimeGroups(start, callback) {
     `);
 
   for (let row of stm.iterate(+start)) {
-    if (callback(row.value, row.count) === false) break;
+    if (callback(row.value, row.count) === false) {
+      break;
+    }
   }
 }
 
 function getPrimeCount(num) {
-  if ($dbCache[num] !== undefined) return $dbCache[num];
+  if ($dbCache[num] !== undefined) {
+    return $dbCache[num];
+  }
 
   let db = openDB();
   let count = db
@@ -77,7 +83,9 @@ function setPrimeCount(num, value) {
 
     $dbCache[num] = value;
     return true;
-  } else return false;
+  } else {
+    return false;
+  }
 }
 
 let _primeMap = new BigSet();
@@ -119,7 +127,9 @@ function sumPrimes(num) {
 
       for (let i = 0; i < v.length; i++) {
         const vi = v[i];
-        if (vi < p2) break;
+        if (vi < p2) {
+          break;
+        }
         s[vi] -= BigInt(p) * (s[Math.floor(vi / p)] - sp);
       }
     }
@@ -129,16 +139,22 @@ function sumPrimes(num) {
 
 function countPrimes(num, trace) {
   let count = getPrimeCount(num);
-  if (count !== undefined) return count;
+  if (count !== undefined) {
+    return count;
+  }
 
   console.log("\r\nNeed to calcule prime count :(");
 
   let r = Math.floor(Math.sqrt(num));
   let v = [];
 
-  for (let i = 1; i <= r + 1; i++) v.push(Math.floor(num / i));
+  for (let i = 1; i <= r + 1; i++) {
+    v.push(Math.floor(num / i));
+  }
 
-  for (let i = v[v.length - 1] - 1; i >= 0; i--) v.push(i);
+  for (let i = v[v.length - 1] - 1; i >= 0; i--) {
+    v.push(i);
+  }
 
   let s = {};
 
@@ -148,45 +164,61 @@ function countPrimes(num, trace) {
   }
 
   for (let p = 2; p <= r + 1; p++) {
-    if (trace) process.stdout.write(`\r${r + 1 - p}  `);
+    if (trace) {
+      process.stdout.write(`\r${r + 1 - p}  `);
+    }
 
     let sp = s[p - 1];
     if (s[p] > sp) {
       let p2 = p * p;
       for (let i = 0; i < v.length; i++) {
         let idx = v[i];
-        if (idx < p2) break;
+        if (idx < p2) {
+          break;
+        }
         s[idx] = s[idx] - (s[Math.floor(idx / p)] - sp);
       }
     }
   }
 
   count = s[num];
-  if (trace) process.stdout.write(`\rSaving results .....`);
+  if (trace) {
+    process.stdout.write(`\rSaving results .....`);
+  }
 
   let added = 0;
   openDB().transaction(() => {
     for (let i in s) {
       i = +i;
-      if (setPrimeCount(i, s[i])) added++;
+      if (setPrimeCount(i, s[i])) {
+        added++;
+      }
     }
 
-    if (setPrimeCount(num, count)) added++;
+    if (setPrimeCount(num, count)) {
+      added++;
+    }
   })();
 
-  if (trace) console.log(`\r${added} values added to database          `);
+  if (trace) {
+    console.log(`\r${added} values added to database          `);
+  }
 
   return count;
 }
 
 function isKnownPrime(p) {
-  if (_primeMap !== undefined && p <= _maxPrime) return _primeMap.has(p);
+  if (_primeMap !== undefined && p <= _maxPrime) {
+    return _primeMap.has(p);
+  }
 
   return false;
 }
 
 function likelyPrime(n) {
-  if (isKnownPrime(n)) return true;
+  if (isKnownPrime(n)) {
+    return true;
+  }
 
   if (
     n % 2 === 0 ||
@@ -203,20 +235,25 @@ function likelyPrime(n) {
     n % 37 === 0 ||
     n % 41 === 0 ||
     n % 43 === 0
-  )
+  ) {
     return false;
+  }
 
   const picked = [];
 
   while (picked.length < 5) {
     const a = Math.floor(Math.random() * (n - 4)) + 2;
-    if (picked.includes(a)) continue;
+    if (picked.includes(a)) {
+      continue;
+    }
 
     picked.push(a);
 
     const v = a.modPow(n - 1, n);
 
-    if (v !== 1) return false;
+    if (v !== 1) {
+      return false;
+    }
   }
 
   return true;
@@ -224,10 +261,16 @@ function likelyPrime(n) {
 
 function isPrime(p) {
   if (_primeMap !== undefined) {
-    if (_primeMap.has(p)) return true;
-    if (p <= _maxPrime) return false;
+    if (_primeMap.has(p)) {
+      return true;
+    }
+    if (p <= _maxPrime) {
+      return false;
+    }
   }
-  if (p === 2 || p === 3 || p === 5 || p === 7 || p === 11) return true;
+  if (p === 2 || p === 3 || p === 5 || p === 7 || p === 11) {
+    return true;
+  }
 
   if (
     (p & 1) === 0 ||
@@ -235,19 +278,28 @@ function isPrime(p) {
     p % 5 === 0 ||
     p % 7 === 0 ||
     p % 11 === 0
-  )
+  ) {
     return false;
+  }
 
   let root = Math.floor(Math.sqrt(p));
 
   for (let i of _primes) {
-    if (i > root) return true;
-    if (p % i === 0) return false;
+    if (i > root) {
+      return true;
+    }
+    if (p % i === 0) {
+      return false;
+    }
   }
 
   for (let i of _extraPrimes) {
-    if (i > root) return true;
-    if (p % i === 0) return false;
+    if (i > root) {
+      return true;
+    }
+    if (p % i === 0) {
+      return false;
+    }
   }
 
   if (root > _maxPrime) {
@@ -255,7 +307,9 @@ function isPrime(p) {
     start = 5 + start * 6;
 
     for (let i = start; i <= root; i += 6) {
-      if (p % i === 0 || p % (i + 2) === 0) return false;
+      if (p % i === 0 || p % (i + 2) === 0) {
+        return false;
+      }
     }
   }
 
@@ -263,7 +317,9 @@ function isPrime(p) {
 }
 
 function factorize(n, callback) {
-  if (n === 1) return;
+  if (n === 1) {
+    return;
+  }
 
   if (isKnownPrime(n)) {
     callback(n, 1);
@@ -273,8 +329,12 @@ function factorize(n, callback) {
   let max = Math.floor(Math.sqrt(n)) + 1;
 
   for (let p of _primes) {
-    if (p > n) break;
-    if (p > max) break;
+    if (p > n) {
+      break;
+    }
+    if (p > max) {
+      break;
+    }
 
     if (n % p === 0) {
       let factor = 0;
@@ -282,13 +342,18 @@ function factorize(n, callback) {
         factor++;
         n /= p;
       }
-      if (callback(p, factor) === false) return; // Caller says to stop
-
-      if (n === 1 || isKnownPrime(n)) break;
+      if (callback(p, factor) === false) {
+        return; // Caller says to stop
+      }
+      if (n === 1 || isKnownPrime(n)) {
+        break;
+      }
     }
   }
 
-  if (n !== 1) callback(n, 1);
+  if (n !== 1) {
+    callback(n, 1);
+  }
 }
 
 function generateMorePrimes(count) {
@@ -303,23 +368,33 @@ function generateMorePrimes(count) {
     let start = maxPrime - (maxPrime % p);
 
     for (let i = start; ; i += p) {
-      if (i < maxPrime) continue;
+      if (i < maxPrime) {
+        continue;
+      }
 
-      if (i > n) break;
+      if (i > n) {
+        break;
+      }
 
       sieve[i - maxPrime] = 1;
     }
   }
 
   start = maxPrime;
-  if ((start & 1) === 0) start++;
+  if ((start & 1) === 0) {
+    start++;
+  }
 
   for (let i = start; i <= n; i += 2) {
-    if (sieve[i - maxPrime] === 1) continue;
+    if (sieve[i - maxPrime] === 1) {
+      continue;
+    }
 
     sieve[i - maxPrime] = 1;
     _primes.push(i);
-    if (_primeMap !== undefined) _primeMap.add(i);
+    if (_primeMap !== undefined) {
+      _primeMap.add(i);
+    }
     _maxPrime = i;
 
     for (let j = i + i; j <= n; j += i) {
@@ -349,19 +424,31 @@ function generatePrimes(max) {
   let sieve = BitArray(max + 1);
 
   for (let i = 2, j = 3, k = 5, l = 7; ; i += 2, j += 3, k += 5, l += 7) {
-    if (i > n) break;
+    if (i > n) {
+      break;
+    }
     sieve.set(i, 1);
-    if (j <= n) sieve.set(j, 1);
-    if (k <= n) sieve.set(k, 1);
-    if (l <= n) sieve.set(l, 1);
+    if (j <= n) {
+      sieve.set(j, 1);
+    }
+    if (k <= n) {
+      sieve.set(k, 1);
+    }
+    if (l <= n) {
+      sieve.set(l, 1);
+    }
   }
 
   for (let i = 11; i <= n; i += 2) {
-    if (sieve.get(i)) continue;
+    if (sieve.get(i)) {
+      continue;
+    }
 
     sieve.set(i, 1);
     _primes.push(i);
-    if (_primeMap !== undefined) _primeMap.add(i);
+    if (_primeMap !== undefined) {
+      _primeMap.add(i);
+    }
     _maxPrime = i;
     if (i <= root) {
       for (let j = i + i; j <= n; j += i) {
@@ -420,7 +507,9 @@ const primeHelper = {
   reset: (_) => reset(),
   maxPrime: (_) => _maxPrime,
   initialize: (max, noMap) => {
-    if (noMap === true) _primeMap = undefined;
+    if (noMap === true) {
+      _primeMap = undefined;
+    }
     let v = $init(max);
     $init = generateMorePrimes;
     return v;
@@ -452,9 +541,13 @@ const primeHelper = {
     return result;
   },
   PHI: (n) => {
-    if (n === 1) return 1;
+    if (n === 1) {
+      return 1;
+    }
 
-    if (isPrime(n)) return n - 1;
+    if (isPrime(n)) {
+      return n - 1;
+    }
 
     let pIter = primes(true);
     let p = pIter.next().value;
@@ -463,11 +556,15 @@ const primeHelper = {
 
     while (value > 1) {
       if (value % p === 0) {
-        while (value % p === 0) value = value / p;
+        while (value % p === 0) {
+          value = value / p;
+        }
 
         phi *= (p - 1) / p;
 
-        if (value === 1) break;
+        if (value === 1) {
+          break;
+        }
 
         if (isPrime(value)) {
           phi *= (value - 1) / value;
@@ -475,7 +572,9 @@ const primeHelper = {
         }
 
         p = pIter.next().value;
-      } else p = pIter.next().value;
+      } else {
+        p = pIter.next().value;
+      }
     }
 
     return phi;

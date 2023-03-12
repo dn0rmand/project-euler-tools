@@ -17,7 +17,9 @@ const awaitable = (worker, progressCallback) =>
     });
     worker.on("error", reject);
     worker.on("exit", (code) => {
-      if (code !== 0) reject(new Error(`stopped with ${code} exit code`));
+      if (code !== 0) {
+        reject(new Error(`stopped with ${code} exit code`));
+      }
     });
   });
 

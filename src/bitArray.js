@@ -2,11 +2,11 @@
 
 module.exports = function (size) {
   size = Math.ceil(size / 8);
-  let buffer = new Uint8Array(size);
+  const buffer = new Uint8Array(size);
 
-  let result = {
+  const result = {
     set: function (index, bool) {
-      var pos = index >>> 3;
+      let pos = index >>> 3;
       if (bool) {
         buffer[pos] |= 1 << index % 8;
       } else {

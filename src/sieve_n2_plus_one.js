@@ -25,7 +25,9 @@ class FactorizationSieve {
     }
 
     for (let n = 0; n <= bound; n++) {
-      if (values[n] === 1) continue;
+      if (values[n] === 1) {
+        continue;
+      }
 
       let p = values[n];
       for (let m = n; m <= bound; m += p) {

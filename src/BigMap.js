@@ -23,18 +23,26 @@ class BigMap {
 
   get(key) {
     let res = this.map.get(key);
-    if (res !== undefined) return res;
-    for (let m of this.maps) {
+    if (res !== undefined) {
+      return res;
+    }
+    for (const m of this.maps) {
       res = m.get(key);
-      if (res !== undefined) return res;
+      if (res !== undefined) {
+        return res;
+      }
     }
   }
 
   has(key) {
-    if (this.map.has(key)) return true;
+    if (this.map.has(key)) {
+      return true;
+    }
 
-    for (let m of this.maps) {
-      if (m.has(key)) return true;
+    for (const m of this.maps) {
+      if (m.has(key)) {
+        return true;
+      }
     }
 
     return false;
@@ -44,49 +52,65 @@ class BigMap {
     this.map.set(key, value);
     if (this.map.size >= BigMap.maxSize) {
       // console.log(`... extending map for ${this.name}`);
-      if (!this.nogrow) this.maps.push(this.map);
+      if (!this.nogrow) {
+        this.maps.push(this.map);
+      }
       this.map = new Map();
     }
   }
 
   clear() {
-    for (let m of this.maps) m.clear();
+    for (const m of this.maps) {
+      m.clear();
+    }
 
     this.maps = [];
     this.map.clear();
   }
 
   forEach(callback) {
-    for (let m of this.maps) {
+    for (const m of this.maps) {
       m.forEach(callback);
     }
     this.map.forEach(callback);
   }
 
   *values(autoClear) {
-    for (let m of this.maps) {
+    for (const m of this.maps) {
       yield* m.values();
-      if (autoClear) m.clear();
+      if (autoClear) {
+        m.clear();
+      }
     }
 
-    if (autoClear && this.maps.length > 0) this.maps = [];
+    if (autoClear && this.maps.length > 0) {
+      this.maps = [];
+    }
 
     yield* this.map.values();
 
-    if (autoClear) this.map.clear();
+    if (autoClear) {
+      this.map.clear();
+    }
   }
 
   *keys(autoClear) {
-    for (let m of this.maps) {
+    for (const m of this.maps) {
       yield* m.keys();
-      if (autoClear) m.clear();
+      if (autoClear) {
+        m.clear();
+      }
     }
 
-    if (autoClear && this.maps.length > 0) this.maps = [];
+    if (autoClear && this.maps.length > 0) {
+      this.maps = [];
+    }
 
     yield* this.map.keys();
 
-    if (autoClear) this.map.clear();
+    if (autoClear) {
+      this.map.clear();
+    }
   }
 }
 

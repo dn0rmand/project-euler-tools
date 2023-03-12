@@ -94,8 +94,8 @@ class PreciseNumber {
     }
 
     let g = this.numerator.gcd(this.divisor);
-    if (g < 0) g = -g;
-    if (g != 1) {
+    g = g < 0 ? -g : g;
+    if (g > 1) {
       this.numerator /= g;
       this.divisor /= g;
     }

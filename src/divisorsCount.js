@@ -3,7 +3,9 @@ module.exports = function (value) {
 
   let count = 2;
 
-  if (isNumberPrime(value)) return count;
+  if (isNumberPrime(value)) {
+    return count;
+  }
 
   let max = Math.floor(Math.sqrt(value));
   let start = 2;
@@ -16,7 +18,12 @@ module.exports = function (value) {
     if (value % i == 0) {
       count++;
       let res = value / i;
-      if (res != i) count++;
+      if (res != i) {
+        count++;
+      }
+      if (res < max) {
+        max = res;
+      }
     }
   }
   return count;

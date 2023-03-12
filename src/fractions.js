@@ -10,7 +10,7 @@ module.exports = function (n) {
     let i = 2;
 
     while (value > 0) {
-      let mod = value % i;
+      const mod = value % i;
       if (mod === 0) {
         yield i;
 
@@ -20,7 +20,9 @@ module.exports = function (n) {
           yield value;
           break;
         }
-      } else i++;
+      } else {
+        i++;
+      }
     }
   }
 

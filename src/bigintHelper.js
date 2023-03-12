@@ -79,7 +79,7 @@ const bigIntHelper = function () {
 
   const firstPrimes = [3n, 5n, 7n, 11n, 13n];
 
-  Number.prototype.isCoPrime = function (b) {
+  BigInt.prototype.isCoPrime = function (b) {
     let a = this.valueOf();
     if ((a & 1n) === 0n && (b & 1n) === 0n) {
       return false;

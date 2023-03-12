@@ -40,31 +40,46 @@ module.exports = function (data, minSize, trace, modulo) {
         if (values[i] != 0n) {
           first = i;
           if (values[i] < 0n) {
-            for (let j = i; j < values.length; j++) values[j] = values[j] * -1n;
+            for (let j = i; j < values.length; j++) {
+              values[j] = values[j] * -1n;
+            }
           }
           break;
         }
       }
 
-      if (first === values.length - 1) return values;
+      if (first === values.length - 1) {
+        return values;
+      }
 
       let g = ABS(values[first]).gcd(ABS(values[first + 1]));
-      if (g == 1n) return values;
+      if (g == 1n) {
+        return values;
+      }
 
-      if (g == 0n) g = MAX(ABS(values[first]), ABS(values[first + 1]));
+      if (g == 0n) {
+        g = MAX(ABS(values[first]), ABS(values[first + 1]));
+      }
 
       for (let i = first + 2; i < values.length; i++) {
         let g2 = g.gcd(ABS(values[i]));
-        if (g2 == 1n) return values;
+        if (g2 == 1n) {
+          return values;
+        }
 
-        if (g2 == 0n) g = MAX(g, ABS(values[i]));
-        else g = g2;
+        if (g2 == 0n) {
+          g = MAX(g, ABS(values[i]));
+        } else {
+          g = g2;
+        }
       }
 
       if (g > 1n) {
         for (let i = first; i < values.length; i++) {
           values[i] /= g;
-          if (values[i] == 0) values[i] = 0n;
+          if (values[i] == 0) {
+            values[i] = 0n;
+          }
         }
       }
 
@@ -79,7 +94,9 @@ module.exports = function (data, minSize, trace, modulo) {
 
         for (let r = 0; r <= size; r++) {
           const i = offset + r;
-          if (i >= data.length) throw "Not enough data";
+          if (i >= data.length) {
+            throw "Not enough data";
+          }
 
           row.push(data[i]);
         }
@@ -129,12 +146,16 @@ module.exports = function (data, minSize, trace, modulo) {
     }
 
     let l = matrix[0][0];
-    if (l == 0) return { factors: undefined, divisor: undefined };
+    if (l == 0) {
+      return { factors: undefined, divisor: undefined };
+    }
 
     for (let i = 1; i < size; i++) {
       let v = matrix[i][i];
 
-      if (v === 0n) return { factors: undefined, divisor: undefined };
+      if (v === 0n) {
+        return { factors: undefined, divisor: undefined };
+      }
 
       l = l.lcm(v);
     }
@@ -147,21 +168,29 @@ module.exports = function (data, minSize, trace, modulo) {
         assert.equal(divisor % matrix[i][i], 0n);
         let k = divisor / matrix[i][i];
 
-        for (let j = 0; j < matrix[i].length; j++) matrix[i][j] *= k;
+        for (let j = 0; j < matrix[i].length; j++) {
+          matrix[i][j] *= k;
+        }
       }
 
-      if (matrix[i][i] !== divisor)
+      if (matrix[i][i] !== divisor) {
         return { factors: undefined, divisor: undefined };
+      }
 
       values.push(matrix[i][size]);
     }
 
-    if (divisor === undefined) divisor = 1n;
+    if (divisor === undefined) {
+      divisor = 1n;
+    }
 
     // verify
 
-    if (validate(values, divisor)) return { factors: values, divisor };
-    else return { factors: undefined, divisor: undefined };
+    if (validate(values, divisor)) {
+      return { factors: values, divisor };
+    } else {
+      return { factors: undefined, divisor: undefined };
+    }
   }
 
   function findSize(a) {
@@ -180,7 +209,9 @@ module.exports = function (data, minSize, trace, modulo) {
           break;
         }
       }
-      if (zeros) return depth;
+      if (zeros) {
+        return depth;
+      }
     }
     return 0;
   }
@@ -221,20 +252,31 @@ module.exports = function (data, minSize, trace, modulo) {
     let res = [];
     let modDiv;
 
-    if (modulo && divisor !== 1n) modDiv = divisor.modInv(modulo);
+    if (modulo && divisor !== 1n) {
+      modDiv = divisor.modInv(modulo);
+    }
 
     for (let i = 0; i < factors.length; i++) {
       let v = values[i];
-      if (i > 0) res.push(v);
+      if (i > 0) {
+        res.push(v);
+      }
 
-      if (modulo) value += v.modMul(factors[i], modulo);
-      else value += v * factors[i];
+      if (modulo) {
+        value += v.modMul(factors[i], modulo);
+      } else {
+        value += v * factors[i];
+      }
     }
 
     if (modulo) {
-      if (modDiv) value = value.modMul(modDiv, modulo);
+      if (modDiv) {
+        value = value.modMul(modDiv, modulo);
+      }
 
-      while (value < 0) value += modulo;
+      while (value < 0) {
+        value += modulo;
+      }
 
       res.push(value % modulo);
     } else {
@@ -272,8 +314,9 @@ module.exports = function (data, minSize, trace, modulo) {
     }
   }
 
-  if (data && data.factors && data.divisor)
+  if (data && data.factors && data.divisor) {
     return makeRecurrence(data.factors, data.divisor);
+  }
 
   const { factors, divisor } = findRecurrence(toBigInt(data), minSize, trace);
 

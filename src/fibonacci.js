@@ -3,10 +3,12 @@ module.exports = function fibonacci(n, modulo) {
 
   const mulFast = (p1, p2) => (p1 * p2) % modulo;
   const mulSlow = (p1, p2) => {
-    let p = p1 * p2;
-    if (p > Number.MAX_SAFE_INTEGER)
+    const p = p1 * p2;
+    if (p > Number.MAX_SAFE_INTEGER) {
       return Number((BigInt(p1) * BigInt(p2)) % BigInt(modulo));
-    else return p % modulo;
+    } else {
+      return p % modulo;
+    }
   };
 
   const mul = needBigTest ? mulSlow : mulFast;
@@ -34,8 +36,11 @@ module.exports = function fibonacci(n, modulo) {
 
     while (pow > 1) {
       if ((pow & 1) !== 0) {
-        if (mm === undefined) mm = m;
-        else mm = multiply(mm, m);
+        if (mm === undefined) {
+          mm = m;
+        } else {
+          mm = multiply(mm, m);
+        }
 
         pow--;
       }

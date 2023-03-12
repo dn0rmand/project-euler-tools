@@ -2,13 +2,11 @@ const assert = require("assert");
 
 require("./bigIntHelper");
 
+let $thresold = 1;
+
 function gcd(v1, v2) {
-  if (v1 < 0) {
-    v1 = -v1;
-  }
-  if (v2 < 0) {
-    v2 = -v2;
-  }
+  v1 = v1 < 0 ? -v1 : v1;
+  v2 = v2 < 0 ? -v2 : v2;
   return v1.gcd(v2);
 }
 
@@ -23,25 +21,18 @@ function factorial(value) {
 }
 
 function differences(values) {
-  const result = [];
-  for (let i = 1; i < values.length; i++) {
-    const v = values[i] - values[i - 1];
-    result.push(v);
-  }
-  return result;
+  return values.reduce((result, value, index) => {
+    if (index > 0) {
+      result.push(value - values[index - 1]);
+    }
+  }, []);
 }
 
 function isConstant(values) {
-  for (let i = 1; i < values.length; i++) {
-    if (values[i] !== values[i - 1]) {
-      return false;
-    }
-  }
-
-  return true;
+  return !values.some((v) => v !== values[0]);
 }
 
-function reduce(values, thresold) {
+function reduce(values) {
   let power = 0n;
 
   while (!isConstant(values)) {
@@ -49,7 +40,7 @@ function reduce(values, thresold) {
     values = differences(values);
   }
 
-  if (values.length < thresold) {
+  if (values.length < $thresold) {
     throw "No solution or not enough data";
   }
 
@@ -138,12 +129,14 @@ const polynomial = {
   thresold: 10,
 
   findPower: function (values) {
+    $thresold = this.thresold;
     values = values.map((v) => BigInt(v));
     const { power } = reduce(values, this.thresold);
     return power;
   },
 
   findPolynomial: function (start, step, fx, max) {
+    $thresold = this.thresold;
     max = max || 1000;
     const values = [];
     let x = start;
@@ -169,6 +162,7 @@ const polynomial = {
   },
 
   solve: function (values) {
+    $thresold = this.thresold;
     values = values.map((v) => BigInt(v));
 
     const coefficients = [...solve(values)];

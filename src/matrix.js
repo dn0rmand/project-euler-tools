@@ -21,7 +21,9 @@ class Matrix {
 
     matrix.array[0] = [...factors].reverse().map((a) => BigInt(a));
 
-    for (let i = 1; i < factors.length; i++) matrix.set(i, i - 1, 1n);
+    for (let i = 1; i < factors.length; i++) {
+      matrix.set(i, i - 1, 1n);
+    }
 
     return matrix;
   }
@@ -41,21 +43,25 @@ class Matrix {
   }
 
   get(row, column) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns)
+    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
       throw "Argument out of range";
+    }
 
     return this.array[row][column];
   }
 
   set(row, column, value) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns)
+    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
       throw "Argument out of range";
+    }
 
     this.array[row][column] = BigInt(value);
   }
 
   multiply(right, modulo) {
-    if (modulo) modulo = BigInt(modulo);
+    if (modulo) {
+      modulo = BigInt(modulo);
+    }
 
     const result = new Matrix(this.rows, right.columns);
 
@@ -68,7 +74,9 @@ class Matrix {
 
         if (modulo) {
           sum %= modulo;
-          while (sum < 0) sum += modulo;
+          while (sum < 0) {
+            sum += modulo;
+          }
         }
 
         result.set(i, j, sum);
@@ -79,7 +87,9 @@ class Matrix {
   }
 
   pow(pow, modulo) {
-    if (pow == 1) return this;
+    if (pow == 1) {
+      return this;
+    }
 
     pow = BigInt(pow);
 
@@ -88,9 +98,7 @@ class Matrix {
 
     while (pow > 1n) {
       if ((pow & 1n) !== 0n) {
-        if (mm === undefined) mm = m;
-        else mm = mm.multiply(m, modulo);
-
+        mm = mm === undefined ? m : mm.multiply(m, modulo);
         pow--;
       }
 
@@ -100,11 +108,7 @@ class Matrix {
       }
     }
 
-    if (mm !== undefined) {
-      m = m.multiply(mm, modulo);
-    }
-
-    return m;
+    return mm === undefined ? m : m.multiply(mm, modulo);
   }
 }
 

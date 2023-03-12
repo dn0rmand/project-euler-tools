@@ -53,11 +53,9 @@ class DistinctCollection {
     if (b === undefined) {
       this.buckets[h] = [value];
       this.length++;
-    } else {
-      if (!b.includes(value)) {
-        b.push(value);
-        this.length++;
-      }
+    } else if (!b.includes(value)) {
+      b.push(value);
+      this.length++;
     }
   }
 

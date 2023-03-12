@@ -1,16 +1,18 @@
 module.exports = function (value, isNumberPrime, fn) {
-  let $isNumberPrime = require("is-number-prime");
+  const $isNumberPrime = require("is-number-prime");
 
   function forEachDivisors(callback) {
-    if (callback(1) === false) return; // early stop
-
-    if (value > 1) {
-      if (callback(value) === false) return; // early stop
+    if (callback(1) === false) {
+      return; // early stop
     }
 
-    if (value <= 2) return;
+    if (value > 1 && callback(value) === false) {
+      return; // early stop
+    }
 
-    if (isNumberPrime(value)) return;
+    if (value <= 2 || isNumberPrime(value)) {
+      return;
+    }
 
     let max = Math.floor(Math.sqrt(value)) + 1;
     let start = 2;
@@ -21,23 +23,31 @@ module.exports = function (value, isNumberPrime, fn) {
     }
     for (let i = start; i < max; i += steps) {
       if (value % i == 0) {
-        if (callback(i) === false) return; // early stop
-
-        let res = value / i;
-        if (res > i) if (callback(res) === false) return; // early stop
-
-        if (res < max) max = res;
+        if (callback(i) === false) {
+          return; // early stop
+        }
+        const res = value / i;
+        if (res > i) {
+          if (callback(res) === false) {
+            return; // early stop
+          }
+        }
+        if (res < max) {
+          max = res;
+        }
       }
     }
   }
 
   function* getDivisors() {
     yield 1;
-    if (value > 1) yield value;
+    if (value > 1) {
+      yield value;
+    }
 
-    if (value <= 2) return;
-
-    if (isNumberPrime(value)) return;
+    if (value <= 2 || isNumberPrime(value)) {
+      return;
+    }
 
     let max = Math.floor(Math.sqrt(value)) + 1;
     let start = 2;
@@ -51,15 +61,24 @@ module.exports = function (value, isNumberPrime, fn) {
         yield i;
 
         let res = value / i;
-        if (res > i) yield res;
+        if (res > i) {
+          yield res;
+        }
 
-        if (res < max) max = res;
+        if (res < max) {
+          max = res;
+        }
       }
     }
   }
 
-  if (isNumberPrime === undefined) isNumberPrime = $isNumberPrime;
+  if (isNumberPrime === undefined) {
+    isNumberPrime = $isNumberPrime;
+  }
 
-  if (typeof fn === "function") forEachDivisors(fn);
-  else return getDivisors();
+  if (typeof fn === "function") {
+    forEachDivisors(fn);
+  } else {
+    return getDivisors();
+  }
 };
