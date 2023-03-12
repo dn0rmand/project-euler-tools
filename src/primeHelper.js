@@ -1,6 +1,6 @@
 const BitArray = require('./bitArray');
 const BigSet = require('./BigSet');
-const { resetDB, getPrimeGroups, getPrimeCount, savePrimeCounts } = require('./primeDatabase');
+const { resetDB, getPrimeGroups, getPrimeCount, savePrimeCounts } = require('@dn0rmand/prime-database');
 
 let _primeMap = new BigSet();
 let _primes = [];
