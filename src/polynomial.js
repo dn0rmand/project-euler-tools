@@ -1,6 +1,6 @@
-const assert = require("assert");
+const assert = require('assert');
 
-require("./bigIntHelper");
+require('./bigIntHelper');
 
 let $thresold = 1;
 
@@ -25,6 +25,7 @@ function differences(values) {
     if (index > 0) {
       result.push(value - values[index - 1]);
     }
+    return result;
   }, []);
 }
 
@@ -41,7 +42,7 @@ function reduce(values) {
   }
 
   if (values.length < $thresold) {
-    throw "No solution or not enough data";
+    throw 'No solution or not enough data';
   }
 
   return { power, constant: values[0] };
@@ -158,7 +159,7 @@ const polynomial = {
       x += step;
     }
 
-    throw "NO SOLUTION";
+    throw 'NO SOLUTION';
   },
 
   solve: function (values) {
@@ -178,12 +179,12 @@ const polynomial = {
       if (c.n !== 0n) {
         let s = 1n;
         if (c.n > 0) {
-          a.push("+");
+          a.push('+');
         } else {
           s = -1n;
-          a.push("-");
+          a.push('-');
         }
-        let b = "";
+        let b = '';
         if (c.d !== 1n) {
           b = `(${s * c.n}/${c.d})`;
         } else {
@@ -201,11 +202,11 @@ const polynomial = {
       return a;
     }, []);
 
-    if (formula[0] === "+") {
+    if (formula[0] === '+') {
       formula.shift();
     }
 
-    return formula.join(" ");
+    return formula.join(' ');
   },
 };
 
