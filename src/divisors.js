@@ -31,8 +31,8 @@ module.exports = function (value, _obsolete, fn) {
 
   function getDivisors() {
     const divisors = [];
-    forEachDivisors((val) => divisors.push(value));
-    return divisors();
+    forEachDivisors((val) => divisors.push(val));
+    return divisors;
   }
 
   if (typeof fn === 'function') {
