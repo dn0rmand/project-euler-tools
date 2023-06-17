@@ -1,82 +1,41 @@
-module.exports = function (value, isNumberPrime, fn) {
-  const $isNumberPrime = require("is-number-prime");
+const primeHelper = require('./primeHelper');
+
+module.exports = function (value, _obsolete, fn) {
+  if (primeHelper.maxPrime() === 0) {
+    primeHelper.initialize(value);
+  }
 
   function forEachDivisors(callback) {
-    if (callback(1) === false) {
-      return; // early stop
-    }
+    const primes = [];
+    primeHelper.factorize(value, (p, f) => {
+      primes.push({ prime: p, power: f });
+    });
 
-    if (value > 1 && callback(value) === false) {
-      return; // early stop
-    }
+    function inner(val, index) {
+      if (val <= value) {
+        callback(val);
+      }
 
-    if (value <= 2 || isNumberPrime(value)) {
-      return;
-    }
-
-    let max = Math.floor(Math.sqrt(value)) + 1;
-    let start = 2;
-    let steps = 1;
-    if (value & (1 !== 0)) {
-      start = 3;
-      steps = 2;
-    }
-    for (let i = start; i < max; i += steps) {
-      if (value % i == 0) {
-        if (callback(i) === false) {
-          return; // early stop
-        }
-        const res = value / i;
-        if (res > i) {
-          if (callback(res) === false) {
-            return; // early stop
-          }
-        }
-        if (res < max) {
-          max = res;
+      for (let i = index; i < primes.length; i++) {
+        const { prime, power } = primes[i];
+        let v = val;
+        for (let p = 1; p <= power; p++) {
+          v *= prime;
+          inner(v, i + 1);
         }
       }
     }
+
+    inner(1, 0);
   }
 
-  function* getDivisors() {
-    yield 1;
-    if (value > 1) {
-      yield value;
-    }
-
-    if (value <= 2 || isNumberPrime(value)) {
-      return;
-    }
-
-    let max = Math.floor(Math.sqrt(value)) + 1;
-    let start = 2;
-    let steps = 1;
-    if (value & (1 !== 0)) {
-      start = 3;
-      steps = 2;
-    }
-    for (let i = start; i < max; i += steps) {
-      if (value % i == 0) {
-        yield i;
-
-        let res = value / i;
-        if (res > i) {
-          yield res;
-        }
-
-        if (res < max) {
-          max = res;
-        }
-      }
-    }
+  function getDivisors() {
+    const divisors = [];
+    forEachDivisors((val) => divisors.push(value));
+    return divisors();
   }
 
-  if (isNumberPrime === undefined) {
-    isNumberPrime = $isNumberPrime;
-  }
-
-  if (typeof fn === "function") {
+  if (typeof fn === 'function') {
     forEachDivisors(fn);
   } else {
     return getDivisors();
