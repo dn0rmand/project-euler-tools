@@ -1,8 +1,15 @@
 const primeHelper = require('./primeHelper');
 
 module.exports = function (value, _obsolete, fn) {
-  if (primeHelper.maxPrime() === 0) {
-    primeHelper.initialize(value);
+  const minPrime = Math.floor(Math.sqrt(value) + 1);
+
+  if (primeHelper.maxPrime() < minPrime) {
+    primeHelper.reset();
+    if (value < 5e7) {
+      primeHelper.initialize(value);
+    } else {
+      primeHelper.initialize(minPrime);
+    }
   }
 
   function forEachDivisors(callback) {
