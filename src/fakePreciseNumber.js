@@ -60,3 +60,5 @@ class FakePreciseNumber {
         return this.value;
     }
 }
+
+module.exports = FakePreciseNumber;
