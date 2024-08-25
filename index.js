@@ -25,6 +25,7 @@ const tools = {
   permutationRanking: require("./src/permutationRanking"),
   polynomial: require("./src/polynomial"),
   PreciseNumber: require("./src/preciseNumber"),
+  FakePreciseNumber: require("./src/fakePreciseNumber"),
   primeHelper: require("./src/primeHelper"),
   primes: require("./src/primes"),
   FactorizationSieve: require("./src/sieve_n2_plus_one"),

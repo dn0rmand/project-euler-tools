@@ -173,7 +173,7 @@ const bigIntHelper = function () {
     }
     if (r != BigInt.ONE)
       throw new Error(
-        this.toString() + " and " + n.toString() + " are not co-prime"
+        this.toString() + " and " + n.toString() + " are not co-prime",
       );
 
     if (t < BigInt.ZERO) t += n;

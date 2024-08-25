@@ -1,147 +1,143 @@
-const Tracer = require("./tracer");
+const Tracer = require('./tracer');
 
 class Matrix {
-  constructor(rows, columns) {
-    this.array = Matrix.empty(rows, columns);
-    this.rows = rows;
-    this.columns = columns;
-  }
-
-  static empty(rows, columns) {
-    const array = new Array(rows);
-    for (let i = 0; i < rows; i++) {
-      array[i] = new Int32Array(columns);
-    }
-    return array;
-  }
-
-  static fromRecurrence(factors) {
-    const matrix = new Matrix(factors.length, factors.length);
-
-    matrix.array[0] = [...factors].reverse().map((a) => Number(a));
-
-    for (let i = 1; i < factors.length; i++) {
-      matrix.set(i, i - 1, 1);
+    constructor(rows, columns) {
+        this.array = Matrix.empty(rows, columns);
+        this.rows = rows;
+        this.columns = columns;
     }
 
-    return matrix;
-  }
-
-  static fromRecurrenceWithSum(factors) {
-    const l = factors.length;
-    const matrix = new Matrix(l + 1, l + 1);
-
-    matrix.array[0] = new Int32Array(
-      [0, ...factors].reverse().map((a) => Number(a))
-    );
-
-    for (let i = 1; i < factors.length; i++) {
-      matrix.set(i, i - 1, 1);
+    static empty(rows, columns) {
+        const array = new Array(rows);
+        for (let i = 0; i < rows; i++) {
+            array[i] = new Int32Array(columns);
+        }
+        return array;
     }
 
-    matrix.array[l] = new Int32Array(
-      [1, ...factors].reverse().map((a) => Number(a))
-    );
-    return matrix;
-  }
+    static fromRecurrence(factors) {
+        const matrix = new Matrix(factors.length, factors.length);
 
-  get(row, column) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
-      throw "Argument out of range";
+        matrix.array[0] = [...factors].reverse().map((a) => Number(a));
+
+        for (let i = 1; i < factors.length; i++) {
+            matrix.set(i, i - 1, 1);
+        }
+
+        return matrix;
     }
 
-    return this.array[row][column];
-  }
+    static fromRecurrenceWithSum(factors) {
+        const l = factors.length;
+        const matrix = new Matrix(l + 1, l + 1);
 
-  set(row, column, value) {
-    if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
-      throw "Argument out of range";
+        matrix.array[0] = new Int32Array([0, ...factors].reverse().map((a) => Number(a)));
+
+        for (let i = 1; i < factors.length; i++) {
+            matrix.set(i, i - 1, 1);
+        }
+
+        matrix.array[l] = new Int32Array([1, ...factors].reverse().map((a) => Number(a)));
+        return matrix;
     }
 
-    this.array[row][column] = Number(value);
-  }
+    get(row, column) {
+        if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
+            throw 'Argument out of range';
+        }
 
-  multiply(right, modulo, trace) {
-    const result = new Matrix(this.rows, right.columns);
-    let modMul, modSum, fixSum;
+        return this.array[row][column];
+    }
 
-    if (modulo) {
-      const modulo_n = BigInt(modulo);
+    set(row, column, value) {
+        if (row < 0 || row >= this.rows || column < 0 || column >= this.columns) {
+            throw 'Argument out of range';
+        }
 
-      modMul = (a, b) => {
-        const v = a * b;
-        if (v > Number.MAX_SAFE_INTEGER) {
-          return Number((BigInt(a) * BigInt(b)) % modulo_n);
+        this.array[row][column] = Number(value);
+    }
+
+    multiply(right, modulo, trace) {
+        const result = new Matrix(this.rows, right.columns);
+        let modMul, modSum, fixSum;
+
+        if (modulo) {
+            const modulo_n = BigInt(modulo);
+
+            modMul = (a, b) => {
+                const v = a * b;
+                if (v > Number.MAX_SAFE_INTEGER) {
+                    return Number((BigInt(a) * BigInt(b)) % modulo_n);
+                } else {
+                    return v % modulo;
+                }
+            };
+
+            modSum = (a, b) => (a + b) % modulo;
+            fixSum = (a) => {
+                while (a < 0) {
+                    a += modulo;
+                }
+                return a;
+            };
         } else {
-          return v % modulo;
-        }
-      };
-
-      modSum = (a, b) => (a + b) % modulo;
-      fixSum = (a) => {
-        while (a < 0) {
-          a += modulo;
-        }
-        return a;
-      };
-    } else {
-      modMul = (a, b) => a * b;
-      modSum = (a, b) => a + b;
-      fixSum = (a) => a;
-    }
-
-    const tracer = new Tracer(trace);
-
-    for (let i = 0; i < this.rows; i++) {
-      tracer.print((_) => this.rows - i);
-
-      const ar = this.array[i];
-      const tr = result.array[i];
-
-      for (let j = 0; j < right.columns; j++) {
-        let sum = 0;
-        for (let y = 0; y < this.columns; y++) {
-          sum = modSum(sum, modMul(ar[y], right.array[y][j]));
+            modMul = (a, b) => a * b;
+            modSum = (a, b) => a + b;
+            fixSum = (a) => a;
         }
 
-        tr[j] = fixSum(sum);
-      }
+        const tracer = new Tracer(trace);
+
+        for (let i = 0; i < this.rows; i++) {
+            tracer.print(() => this.rows - i);
+
+            const ar = this.array[i];
+            const tr = result.array[i];
+
+            for (let j = 0; j < right.columns; j++) {
+                let sum = 0;
+                for (let y = 0; y < this.columns; y++) {
+                    sum = modSum(sum, modMul(ar[y], right.array[y][j]));
+                }
+
+                tr[j] = fixSum(sum);
+            }
+        }
+
+        tracer.clear();
+
+        return result;
     }
 
-    tracer.clear();
+    pow(pow, modulo, trace) {
+        pow = BigInt(pow);
+        if (pow === 1n) {
+            return this;
+        }
 
-    return result;
-  }
+        let m = this;
+        let mm = undefined;
 
-  pow(pow, modulo, trace) {
-    pow = BigInt(pow);
-    if (pow === 1n) {
-      return this;
+        const tracer = new Tracer(trace);
+
+        while (pow > 1n) {
+            tracer.print(() => pow);
+
+            if ((pow & 1n) !== 0n) {
+                mm = mm === undefined ? m : mm.multiply(m, modulo, trace);
+                pow--;
+            }
+
+            while (pow > 1n && (pow & 1n) === 0n) {
+                pow /= 2n;
+                m = m.multiply(m, modulo, trace);
+            }
+        }
+
+        m = mm === undefined ? m : m.multiply(mm, modulo, trace);
+        tracer.clear();
+        return m;
     }
-
-    let m = this;
-    let mm = undefined;
-
-    const tracer = new Tracer(trace);
-
-    while (pow > 1n) {
-      tracer.print((_) => pow);
-
-      if ((pow & 1n) !== 0n) {
-        mm = mm === undefined ? m : mm.multiply(m, modulo, trace);
-        pow--;
-      }
-
-      while (pow > 1n && (pow & 1n) === 0n) {
-        pow /= 2n;
-        m = m.multiply(m, modulo, trace);
-      }
-    }
-
-    m = mm === undefined ? m : m.multiply(mm, modulo, trace);
-    tracer.clear();
-    return m;
-  }
 }
 
 module.exports = Matrix;

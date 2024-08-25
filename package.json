@@ -1,6 +1,6 @@
 {
     "name": "@dn0rmand/project-euler-tools",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "Set of tools for Project Euler",
     "main": "index.js",
     "repository": {
@@ -21,5 +21,8 @@
         "console-control-strings": "^1.1.0",
         "is-number-prime": "^1.0.1",
         "slack-webhook": "^1.0.0"
+    },
+    "devDependencies": {
+        "prettier": "3.3.3"
     }
 }

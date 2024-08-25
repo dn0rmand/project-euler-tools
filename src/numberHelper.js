@@ -11,7 +11,7 @@ const numberHelper = function () {
         const { numerator: divisor, divisor: numerator } = makeFraction(
           1 / value,
           precision,
-          deep
+          deep,
         );
         return { numerator, divisor };
       }
@@ -25,7 +25,7 @@ const numberHelper = function () {
       let { numerator: divisor, divisor: numerator } = makeFraction(
         1 / value,
         precision * 10,
-        deep - 1
+        deep - 1,
       );
 
       numerator += i * divisor;
@@ -157,7 +157,7 @@ const numberHelper = function () {
     }
     if (r != 1) {
       throw new Error(
-        this.toString() + " and " + modulo.toString() + " are not co-prime"
+        this.toString() + " and " + modulo.toString() + " are not co-prime",
       );
     }
     if (t < 0) {

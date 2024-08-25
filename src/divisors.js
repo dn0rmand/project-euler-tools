@@ -1,4 +1,4 @@
-const primeHelper = require('./primeHelper');
+const primeHelper = require("./primeHelper");
 
 module.exports = function (value, _obsolete, fn) {
   const minPrime = Math.floor(Math.sqrt(value) + 1);
@@ -42,7 +42,7 @@ module.exports = function (value, _obsolete, fn) {
     return divisors;
   }
 
-  if (typeof fn === 'function') {
+  if (typeof fn === "function") {
     forEachDivisors(fn);
   } else {
     return getDivisors();

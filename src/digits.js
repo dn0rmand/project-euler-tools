@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (value, base) {
   const digits = [];
@@ -9,7 +9,7 @@ module.exports = function (value, base) {
   if (value < 0) {
     value = -value;
   }
-  if (typeof value === 'bigint') {
+  if (typeof value === "bigint") {
     base = base ? BigInt(base) : 10n;
     while (value > 0) {
       const d = value % base;

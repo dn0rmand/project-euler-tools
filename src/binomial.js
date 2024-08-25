@@ -26,7 +26,7 @@ function modBinomial(n, p, modulo) {
 
     return modBinomial(n2, p2, modulo).modMul(
       modBinomial(n % modulo, p % modulo, modulo),
-      Number(modulo)
+      Number(modulo),
     );
   }
 }

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const MAX_SIZE = 2 ** 32;
 
