@@ -71,7 +71,7 @@ class TimeLogger {
   }
 
   static wrap(message, action) {
-    var logger = new TimeLogger(message);
+    const logger = new TimeLogger(message);
     logger.start();
     try {
       return action();
@@ -84,7 +84,7 @@ class TimeLogger {
   }
 
   static async wrapAsync(message, action) {
-    var logger = new TimeLogger(message);
+    const logger = new TimeLogger(message);
     logger.start();
     try {
       return await action();
