@@ -1,6 +1,6 @@
 {
     "name": "@dn0rmand/project-euler-tools",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "Set of tools for Project Euler",
     "main": "index.js",
     "repository": {
@@ -23,6 +23,6 @@
         "slack-webhook": "^1.0.0"
     },
     "devDependencies": {
-        "prettier": "3.3.3"
+        "prettier": "3.5.1"
     }
 }
